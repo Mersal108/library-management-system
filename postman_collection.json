@@ -1,0 +1,584 @@
+{
+  "info": {
+    "name": "Library Management System API",
+    "description": "Complete API collection for testing the Library Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "your-secret-api-key",
+      "type": "string"
+    },
+    {
+      "key": "book_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "borrower_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "borrowing_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "Create Book",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('book_id', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Great Gatsby\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"isbn\": \"9780743273565\",\n  \"total_quantity\": 5,\n  \"shelf_location\": \"A1\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            }
+          }
+        },
+        {
+          "name": "Get All Books",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Book by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "{{book_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Search Books by Title",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search?q=Gatsby&field=title",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Gatsby"
+                },
+                {
+                  "key": "field",
+                  "value": "title"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Books by Author",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search?q=Fitzgerald&field=author",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Fitzgerald"
+                },
+                {
+                  "key": "field",
+                  "value": "author"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Books by ISBN",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search?q=9780743273565&field=isbn",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "9780743273565"
+                },
+                {
+                  "key": "field",
+                  "value": "isbn"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Book",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Great Gatsby - Updated Edition\",\n  \"total_quantity\": 10\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "{{book_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Book",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "{{book_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Borrowers",
+      "item": [
+        {
+          "name": "Register Borrower",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('borrower_id', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/borrowers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowers"]
+            }
+          }
+        },
+        {
+          "name": "Get All Borrowers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/borrowers?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowers"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Borrower by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/borrowers/{{borrower_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowers", "{{borrower_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Borrower",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe Updated\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/borrowers/{{borrower_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowers", "{{borrower_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Borrower",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/borrowers/{{borrower_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowers", "{{borrower_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Borrowings",
+      "item": [
+        {
+          "name": "Checkout Book",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('borrowing_id', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"book_id\": {{book_id}},\n  \"borrower_id\": {{borrower_id}}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/borrowings/checkout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowings", "checkout"]
+            }
+          }
+        },
+        {
+          "name": "Return Book",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/borrowings/{{borrowing_id}}/return",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowings", "{{borrowing_id}}", "return"]
+            }
+          }
+        },
+        {
+          "name": "Get Borrower's Current Books",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/borrowings/borrower/{{borrower_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowings", "borrower", "{{borrower_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Overdue Books",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/borrowings/overdue",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowings", "overdue"]
+            }
+          }
+        },
+        {
+          "name": "Get All Borrowings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/borrowings?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowings"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Borrowings by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/borrowings?status=borrowed&page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "borrowings"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "borrowed"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Get Overdue Borrowings (Last Month)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/overdue/last-month",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "overdue", "last-month"]
+            }
+          }
+        },
+        {
+          "name": "Get All Borrowings (Last Month)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/all/last-month",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "all", "last-month"]
+            }
+          }
+        },
+        {
+          "name": "Export Overdue Borrowings (CSV)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/export/overdue/last-month?format=csv",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "export", "overdue", "last-month"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "csv"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Export Overdue Borrowings (XLSX)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/export/overdue/last-month?format=xlsx",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "export", "overdue", "last-month"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "xlsx"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Export All Borrowings (CSV)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/export/all/last-month?format=csv",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "export", "all", "last-month"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "csv"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Export All Borrowings (XLSX)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/export/all/last-month?format=xlsx",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "export", "all", "last-month"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "xlsx"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Export Borrowings by Period",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/export/period?start_date=2024-01-01&end_date=2024-01-31&format=csv",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "export", "period"],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2024-01-31"
+                },
+                {
+                  "key": "format",
+                  "value": "csv"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
