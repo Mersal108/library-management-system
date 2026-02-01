@@ -401,3 +401,7 @@ The project includes unit tests for the Books service module.
 - Parameterized queries (SQL injection prevention)
 - Rate limiting on POST endpoints
 - Optional API key authentication
+
+## Schmea digram
+
+![Schema](image.png)
